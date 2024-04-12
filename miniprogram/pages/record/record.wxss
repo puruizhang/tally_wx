@@ -1,0 +1,21 @@
+.page-gradient {
+  background: linear-gradient(to bottom, #ffffff, #ffffff);
+  padding-top: 20%;
+  height: 270px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.step{
+  height: 90%;
+  width: 90%;
+  margin-top: 21%;
+}
+
+.exit-icon {
+  position: absolute;
+  top: 10%;
+  left: 7%;
+}

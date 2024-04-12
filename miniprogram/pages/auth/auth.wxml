@@ -1,0 +1,8 @@
+<view>
+  <text
+  style="position: absolute;top: 30%;font-size: 23px;left: 31%;"
+  >系统登录授权</text>
+  <van-button 
+  style="position: absolute;top: 50%;left: 10%;width: 80%;"
+  type="primary" size="large">授权登录</van-button>
+</view>

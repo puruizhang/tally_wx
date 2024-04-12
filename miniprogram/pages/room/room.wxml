@@ -1,0 +1,228 @@
+<view class="page-gradient">
+  <div style="font-size: 17px;">房间({{roomNo}})</div>
+
+  <div style="width: 100%;">
+    <image bindtap="toHistory" class="avatar" src="{{myPointInfoVo.userAvatar}}" mode="aspectFill"></image>
+    <div style="color: rgb(179, 172, 172);font-size: 13px;">
+      {{myPointInfoVo.userName}},祝你玩的开心～
+    </div>
+  </div>
+
+  <view class="card">
+    <view class="row-card">
+      <view style="font-size: 18px;color: white;font-weight: bold;margin-right: auto;">
+        我的积分
+      </view>
+      <van-icon style="margin-left: auto;padding-right: 1%;" bindtap="getDetails" name="bars" size="25px" info="" />
+    </view>
+
+    <view class="row-card" style="padding-top: 7%;">
+      <view style="font-size: 26px;color: white;font-weight: bold;margin-right: auto;">
+        {{myPointInfoVo.userPoint}}
+      </view>
+      <van-button style="margin-left: auto;" type="info" round hairline icon="replay" bind:click="init" color="linear-gradient(to right, #4bb0ff, #6149f6)" />
+    </view>
+  </view>
+
+</view>
+
+
+<view style="padding-bottom: 6%;padding-top: 4%; display: flex;">
+  <van-button style="margin-right: auto;margin-left: 5%;" plain type="danger" size="small" round icon="/images/exit.png" bind:click="toIndex">
+    结束本局
+  </van-button>
+
+  <!-- <van-button style="margin-left: auto;margin-right: 5%;" plain type="info" size="small" round icon="plus" bind:click="invite">邀请好友</van-button> -->
+
+  <van-button style="margin-left: auto;margin-right: 5%;" plain type="primary" size="small" open-type="share" round icon="chat-o">微信邀请</van-button>
+
+</view>
+
+<van-notice-bar
+  scrollable="{{ true }}"
+  text="此程序只能用于娱乐记账,不可用于非法活动,新增功能将陆续推出,感谢使用!"
+/>
+<div wx:for="{{otherPointInfoVoArr}}" wx:key="userId">
+  <view style="padding-bottom: 8px;">
+    <van-cell-group inset>
+      <van-cell center custom-class="round">
+        <view slot="title" style="display: flex;align-items: center">
+          <image class="image-container" src="{{item.userAvatar}}" mode="aspectFill"></image>
+          <view>
+            <text class="hidden-text" style="font-weight: bold;font-size: 15px;color: rgb(0, 0, 0);">{{item.userName}}</text>
+          </view>
+        </view>
+        <view style="color: rgb(255, 0, 0);font-size: 16px;display: flex;align-items: center;justify-content: flex-end; ">
+          <view style="margin-right: 5px;">
+            {{item.userPoint}}分
+          </view>
+          <van-button bind:click="getSowKeyboard" size="small" round color="linear-gradient(to right, #4bb0ff, #6149f6)" data-uid="{{item.userId}}" data-name="{{item.userName}}">
+            转账
+          </van-button>
+        </view>
+      </van-cell>
+    </van-cell-group>
+  </view>
+</div>
+
+<text wx:if="{{!showCode}}" style="display: flex; justify-content: center;color: #1989fa;font-size: 14px;text-decoration: underline;padding-top: 15px;" bindtap="codeOpenMethod">显示邀请码</text>
+
+<!-- <text wx:if="{{showCode}}" style="display: flex; justify-content: center;color: #1989fa;font-size: 14px;text-decoration: underline;padding-top: 15px;" bindtap="codeOpenMethod">隐藏邀请码</text> -->
+
+<!-- <van-empty wx:else image="{{roomCode}}" description="邀请好友扫码加入本房间">
+  <view style="margin-top:-22px;">
+    <!-- <text style="color: #969799;font-size: 14px;">好友进入房间后可</text> -->
+    <!-- <text style="color: #ee0a24;font-size: 14px;text-decoration: underline;padding-bottom: 40px;" bindtap="codeCloseMethod">隐藏邀请码</text>
+  </view>
+</van-empty> -->
+
+
+<van-popup bind:close="closeSowKeyboard" root-portal="true" round show="{{ showKeyboard }}" position="bottom" custom-style="display: flex;justify-content: center;flex-wrap: wrap;" closeable close-icon="close">
+  <div style="width: 80%;padding-top: 15%;padding-bottom: 3%;">
+    <van-field input-class="money" size="large" readonly center value="{{ money }}" placeholder="请输入转账金额" error-message="转给{{payeeUserName}}" error-message-align="center" type="digit" input-align="center">
+    </van-field>
+  </div>
+
+  <div style="width: 80%;background-color: rgb(239, 245, 245);display: flex;justify-content: center;flex-wrap: wrap;border-radius: 30rpx;margin-bottom: 8%;">
+    <van-row gutter="10" style="margin-top: 5%;">
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="1" custom-class="key-exchange" size="normal" round>
+          1
+        </van-button>
+      </van-col>
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="2" custom-class="key-exchange" size="normal" round>
+          2
+        </van-button>
+      </van-col>
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="3" custom-class="key-exchange" size="normal" round>
+          3
+        </van-button>
+      </van-col>
+    </van-row>
+    <van-row gutter="10" style="margin-top: 2%;">
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="4" custom-class="key-exchange" size="normal" round>
+          4
+        </van-button>
+      </van-col>
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="5" custom-class="key-exchange" size="normal" round>
+          5
+        </van-button>
+      </van-col>
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="6" custom-class="key-exchange" size="normal" round>
+          6
+        </van-button>
+      </van-col>
+    </van-row>
+    <van-row gutter="10" style="margin-top: 2%;">
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="7" custom-class="key-exchange" size="normal" round>
+          7
+        </van-button>
+      </van-col>
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="8" custom-class="key-exchange" size="normal" round>
+          8
+        </van-button>
+      </van-col>
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="9" custom-class="key-exchange" size="normal" round>
+          9
+        </van-button>
+      </van-col>
+    </van-row>
+    <van-row gutter="10" style="margin-top: 2%;">
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="." custom-class="key-exchange" size="normal" round>
+          .
+        </van-button>
+      </van-col>
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="0" custom-class="key-exchange" size="normal" round>
+          0
+        </van-button>
+      </van-col>
+      <van-col span="8">
+        <van-button bind:click="keyboardClick" data-key="delete" custom-class="key-exchange" size="normal" round icon="/images/delete.png" />
+      </van-col>
+    </van-row>
+    <van-row style="margin-top: 2%;margin-bottom: 5%;">
+      <van-col span="24">
+        <van-button color="linear-gradient(to right, #4bb0ff, #6149f6)" custom-class="key-exchange-submit" size="normal" round bind:click="submitMoney">
+          确认转账
+        </van-button>
+      </van-col>
+    </van-row>
+  </div>
+</van-popup>
+
+<van-popup bind:close="closeDetails" root-portal="true" round show="{{ showDetails }}" position="bottom" custom-style=" display: flex;justify-content: center;flex-wrap:wrap;" closeable close-icon="close">
+  <van-empty wx:if="{{tansferDetails.length<1}}" style="height: 300px;padding-top: 15%;" description="暂无明细记录" />
+
+  <scroll-view wx:else scroll-y="true" style="height: 320px;padding-top: 15%;width: 90%;">
+    <view>
+      <van-cell-group wx:for="{{tansferDetails}}" wx:key="id">
+        <van-cell center wx:if="{{item.payeeUser.id === myPointInfoVo.userId}}">
+          <view slot="title" style="padding-left: 10px;">
+            <view style="color: rgb(255, 0, 0);font-size: 17px;">+{{item.amount}}分</view>
+            <view style="color: rgb(189, 189, 189);">{{item.createTime}}</view>
+          </view>
+          <view style="display: flex;align-items: center">
+            来自
+            <image class="image-container" style="margin: 4px;" src="{{item.payerUser.avatarUrl}}" mode="aspectFill"></image>
+            <view>
+              <text class="hidden-text" style="font-weight: bold;font-size: 15px;color: rgb(0, 0, 0);">{{item.payerUser.userName}}</text>
+            </view>
+          </view>
+        </van-cell>
+
+        <van-cell center wx:if="{{item.payerUser.id === myPointInfoVo.userId}}">
+          <view slot="title" style="padding-left: 10px;">
+            <view style="color: rgb(135, 189, 118);font-size: 17px;">-{{item.amount}}分</view>
+            <view style="color: rgb(189, 189, 189);">{{item.createTime}}</view>
+          </view>
+          <view style="display: flex;align-items: center">
+            转给
+            <image class="image-container" style="margin: 4px;" src="{{item.payeeUser.avatarUrl}}" mode="aspectFill"></image>
+            <view>
+              <text class="hidden-text" style="font-weight: bold;font-size: 15px;color: rgb(0, 0, 0);">{{item.payeeUser.userName}}</text>
+            </view>
+          </view>
+        </van-cell>
+      </van-cell-group>
+    </view>
+  </scroll-view>
+</van-popup>
+
+<van-toast id="van-toast" />
+
+<van-share-sheet show="{{ showShare }}" title="邀请好友" options="{{ options }}" bind:select="onSelect" bind:close="onCloseShare" />
+
+<van-dialog bind:close="codeClose" confirmButtonText="关闭" use-slot title="邀请好友扫码加入本房间" show="{{ showCode }}">
+  <view style="width: 100%;display: flex;justify-content: center;padding-top: 5%;padding-bottom: 5%;">
+    <image style="width: 500rpx;height: 500rpx;" src="{{roomCode}}" show-menu-by-longpress="true" />
+  </view>
+</van-dialog>
+
+<van-dialog id="van-dialog" />
+
+<!-- <van-dialog title="添加到我的小程序指引" bind:confirm="noPrompt" use-slot show="{{ showGuide }}" confirm-button-text="我已知晓">
+  <div class="step" style="padding-top: 5%;">
+    <van-icon name="/images/step1.png" size="18px" /><text class="step-text">点击右上角的</text>
+    <van-icon name="/images/menu.png" size="25px" />
+  </div>
+  <div class="step pt2">
+    <van-icon name="/images/step2.png" size="18px" /><text class="step-text">点击添加到我的小程序</text>
+    <van-icon name="/images/add.png" size="20px" />
+  </div>
+  <div class="step pt2">
+    <van-icon name="/images/step3.png" size="18px" /><text class="step-text">微信首页下拉可快速找到本程序</text>
+  </div>
+  <view class="pt2 center" style="padding-bottom: 3%;">
+    <image style="width: 90%;height:325rpx;border-radius:10px" src="https://kodo.xtyu.top/bookkeeping/static/my.png" show-menu-by-longpress="true" />
+  </view> -->
+<!-- </van-dialog> -->

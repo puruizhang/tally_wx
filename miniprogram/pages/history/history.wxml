@@ -1,0 +1,136 @@
+<!--pages/history/history.wxml-->
+<view class="page-gradient">
+  <div style="width: 100%;" custom-class="row-center">
+    <van-row>
+      <van-col custom-class="row-center" span="24">
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="setHead">
+          <div class="avatar-wrapper">
+            <image class="avatar" src="{{userAvatar}}" mode="aspectFill"></image>
+          </div>
+        </button>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col custom-class="row-center" span="24">
+        <div class="info-font">
+          {{userName}}
+        </div>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col offset="3" span="6">胜:
+      <span bind:tap="showHistory" style="color: coral;text-decoration: underline;">{{victories}}</span>
+      场</van-col>
+      <van-col span="1">/</van-col>
+      <van-col span="6">输 
+        <span bind:tap="showHistory" style="color: coral;text-decoration: underline;">{{losses}}</span>
+        场</van-col>
+      <van-col span="1">/</van-col>
+      <van-col span="6">胜率 
+        <span style="color: coral;">{{winRate}}</span>
+        </van-col>
+    </van-row>
+  </div>
+</view>
+
+<view style="padding-bottom: 8px;display: flex;align-items: center;justify-content: center;  flex-wrap: wrap;">
+  <van-cell-group inset style="width: 90%;">
+    <van-cell custom-class="round-top" size="large" title="头像" center icon="user-circle-o">
+      <view style="display: flex;justify-content: flex-end;">
+        <button style="border: 1px solid #fff;width: 60px;height: 45px;margin-right: -10%;display: flex;align-items: center;justify-content: center;" plain open-type="chooseAvatar" bindchooseavatar="setHead">
+          <image style="width: 30px;height: 30px;  border-radius: 50%;box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);" src="{{userAvatar}}" mode="aspectFill"></image>
+        </button>
+        <van-icon name="arrow" />
+      </view>
+    </van-cell>
+    <van-cell size="large"  custom-class="round-bottom"  title="昵称" center icon="coupon-o">
+      <view style="display: flex;justify-content: flex-end;">
+        <input style="color: rgb(0, 0, 0);" class="input-style" placeholder="请输入昵称" type="nickname" value="{{userName}}" bindblur="setName" />
+        <van-icon name="arrow" />
+      </view>
+    </van-cell>
+
+  </van-cell-group>
+
+  <!-- <van-cell-group inset style="position: relative;width: 90%;padding-top: 5%;">
+    <van-cell custom-class="round-bottom round-top" size="large" title="联系客服" center icon="chat-o">
+    
+      <view style="display: flex;justify-content: flex-end;">
+        <van-icon name="arrow" />
+      </view>
+    </van-cell>
+  </van-cell-group> -->
+  <!-- <van-cell-group inset style="width: 90%;padding-top: 5%;">
+    <van-cell custom-class="round-bottom round-top" size="large" title="发布日志" center icon="label-o" bind:click="goRecord">
+      <view>
+        <van-icon name="arrow" />
+      </view>
+    </van-cell>
+  </van-cell-group> -->
+  <van-cell-group inset style="width: 90%;padding-top: 5%;">
+    <van-cell custom-class="round-bottom round-top" size="large" title="免责声明" center icon="warning-o" bind:click="showDisclaimer">
+      <view>
+        <van-icon name="arrow" />
+      </view>
+    </van-cell>
+  </van-cell-group>
+
+  
+</view>
+
+
+<van-popup bind:close="closeDisclaimer" root-portal="true" round show="{{ showDisclaimer }}" position="bottom" custom-style=" display: flex;justify-content: center;flex-wrap:wrap;" closeable close-icon="close">
+  <div style="width: 80%;padding-top: 15%;display: flex;flex-wrap:wrap;margin-bottom: 8%;">
+    <div style="font-size: 17px;padding-bottom: 5px;"><b>1.信息收集与使用</b></div>
+    <div style="font-weight: 200;font-size: 15px;">本小程序无需用户授权任何权限，也不会在后台收集用户的任何信息。对于用户上传的头像和昵称，我们会经过腾讯安全校验后保存在我们的服务器中。然而，开发者不承担保密和保管的责任。如果您对此有任何顾虑，您可以选择使用系统提供的默认头像和昵称。请注意，程序使用过程中产生的数据归开发者所有。</div>
+    <div style="font-size: 17px;padding-bottom: 5px;padding-top: 13px;"><b>2.使用限制</b></div>
+    <div style="font-weight: 200;font-size: 15px;padding-bottom: 10px;">本小程序仅供学习娱乐使用,请勿用于非法活动,由此产生的后果,开发者概不负责。</div>
+
+    <div style="font-weight: 200;font-size: 15px;">如有问题请联系
+      <text bindtap="copyEmail" style="color: rgb(87, 204, 52);font-weight: bold; ">854554762@qq.com</text>
+      或<button open-type="contact">联系客服</button>
+    </div>
+  </div>
+
+</van-popup>
+
+
+<van-popup bind:close="closeHistory" root-portal="true" round show="{{ showHistory }}" position="bottom" custom-style=" display: flex;justify-content: center;flex-wrap:wrap;" closeable close-icon="close">
+  <van-empty wx:if="{{userHistoryInfoDetails.length<1}}" style="height: 300px;padding-top: 15%;" description="暂无历史记录"/>
+  <scroll-view wx:else scroll-y="true" style="height: 320px;padding-top: 15%;width: 90%;">
+    <view>
+      <van-cell-group wx:for="{{userHistoryInfoDetails}}" wx:key="index" wx:for-item="room">
+        <van-cell center>
+          <view slot="title" style="margin-top: 10px;">
+            <view style="font-weight: bold;font-size: 16px;color: rgb(0, 0, 0);">
+            <text>{{room.roomName}}</text>的房间</view>
+            <view style="color: rgb(189, 189, 189);">{{room.createTime}}</view>
+          </view>
+          <view>
+            <div wx:if="{{room.userPoint==0}}" class="info-font" style="padding-right: 8%;">
+              <span style="display: block;margin-top: 28px;">平局</span>
+              <span style="display: block;color: rgb(81, 190, 105);">{{room.userPoint}}积分</span>
+            </div>
+            <div wx:if="{{room.userPoint>0}}" class="info-font" style="padding-right: 8%;">
+              <span style="display: block;margin-top: 28px;">赢</span>
+              <span style="display: block;color: rgb(81, 190, 105);">{{room.userPoint}}积分</span>
+            </div>
+            <div wx:if="{{room.userPoint<0}}" class="info-font" style="padding-right: 8%;">
+              <span style="display: block;margin-top: 28px;">输</span>
+              <span style="display: block;color: rgb(228, 58, 86);">{{room.userPoint}}积分</span>
+            </div>
+          </view>
+        </van-cell>
+      </van-cell-group>
+    </view>
+  </scroll-view>
+</van-popup>
+
+
+<van-toast id="van-toast" />
+
+<version/>
+
+<van-icon info="" class="exit-icon" name="revoke" size="25" bindtap="toLast" />
+
+<van-dialog id="van-dialog" />

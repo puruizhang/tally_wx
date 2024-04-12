@@ -1,0 +1,12 @@
+<!--pages/record.wxml-->
+<view class="page-gradient">
+  <van-steps custom-class="step"
+  steps="{{ steps }}"
+  active="{{ active }}"
+  direction="vertical"
+  active-color="#ee0a24"
+/>
+</view>
+<view style="padding-bottom: 8px;display: flex;align-items: center;justify-content: center;flex-wrap: wrap;">
+</view>
+<van-icon info="" class="exit-icon" name="revoke" size="25" bindtap="toLast" />
